@@ -1,0 +1,13 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+
+# Never commit a real library into the tutorial repo
+files/
+Collections/
+*.bib
+*.sqlite
