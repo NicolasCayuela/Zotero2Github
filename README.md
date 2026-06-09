@@ -2,24 +2,24 @@
 
 ![The Zotero2Github app](docs/gui.png)
 
-Back up your Zotero library — references **and** PDFs — in a private GitHub
+Back up your Zotero library (references and PDFs) in a private GitHub
 repository, and recreate your Zotero collections as folders so the repo is easy
 to browse.
 
-The easiest way is the **app** (`scripts/zotero_gui.py`): point it at your Zotero
-export, click **Sort**, and it builds a `Collections/` tree ready to push. You can
-also do everything [by hand with git](#doing-it-without-the-app) — the app just
-saves you the manual steps.
+The easiest way is the **app** (`scripts/zotero_gui.py`). Point it at your Zotero
+export, click **Sort**, and it builds a `Collections/` tree ready to push. If you
+prefer, you can also do everything [by hand with git](#doing-it-without-the-app).
+The app simply saves you the manual steps.
 
 > **Keep the repository private.** Research PDFs are usually copyrighted, so this
-> is a personal backup, not a way to share papers. (This repo itself contains only
-> the guide and the scripts, no papers.)
+> is meant as a personal backup rather than a way to share papers. (This repo
+> itself contains only the guide and the scripts, no papers.)
 
 ## What you need
 
 - **Zotero** and a **GitHub account**.
 - **Python 3.8+** to run the app or the scripts.
-- **git** to push (and optionally the GitHub CLI `gh` to create the repo).
+- **git** to push, and optionally the GitHub CLI `gh` to create the repo.
 
 ## 1. Export from Zotero
 
@@ -47,8 +47,8 @@ in. To rebuild your collection tree, the app reads it from Zotero's own database
 python scripts/zotero_gui.py
 ```
 
-1. **Export folder** — the folder from step 1 (with the `.bib` and `files/`).
-2. **zotero.sqlite** — your database. The app opens it **read-only**, so you can
+1. **Export folder**: the folder from step 1 (with the `.bib` and `files/`).
+2. **zotero.sqlite**: your database. The app opens it **read-only**, so you can
    point at the live file even while Zotero is open.
 3. Press **Sort**.
 
@@ -65,18 +65,18 @@ Collections/
 MyBib.bib
 ```
 
-An item in several collections is copied into each; anything it can't match by
-title goes to `Collections/(Unfiled)/`.
+An item that belongs to several collections is copied into each one. Anything it
+can't match by title goes to `Collections/(Unfiled)/`.
 
 When it finishes, the **log prints the exact git commands** (or website steps) to
-push the folder — the app never runs git for you. See
+push the folder. The app never runs git for you. See
 [Push to GitHub](#3-push-to-github) below.
 
 > **Tip:** tick **"Also back up database + storage/"** if you want a *faithful*
-> restore later — see [Restore on another computer](#restore-on-another-computer).
+> restore later. See [Restore on another computer](#restore-on-another-computer).
 
-The app uses only Tkinter, which ships with Python — nothing to install. For
-drag-and-drop (drop a folder or file onto a field) add the optional extra:
+The app uses only Tkinter, which ships with Python, so there is nothing to install.
+For drag-and-drop (drop a folder or file onto a field) add the optional extra:
 
 ```bash
 pip install tkinterdnd2
@@ -84,8 +84,8 @@ pip install tkinterdnd2
 
 ## 3. Push to GitHub
 
-1. Create a **private** repo at <https://github.com/new> (no README or .gitignore;
-   your folder already has files). Or with the CLI: `gh repo create my-zotero-library --private`.
+1. Create a **private** repo at <https://github.com/new> (no README or .gitignore,
+   since your folder already has files). With the CLI: `gh repo create my-zotero-library --private`.
 2. In a terminal opened in your sorted export folder:
 
    ```bash
@@ -97,8 +97,8 @@ pip install tkinterdnd2
    git push -u origin main
    ```
 
-The first push can take a few minutes with many PDFs; after that only changes are
-sent. No terminal? Use GitHub Desktop, or the repo's **Add file > Upload files**
+The first push can take a few minutes with many PDFs. After that, only changes are
+sent. If you have no terminal, use GitHub Desktop, or the repo's **Add file > Upload files**
 page.
 
 ### Updating later
@@ -114,7 +114,7 @@ git push
 ## Restore on another computer
 
 The `Collections/` tree and `.bib` are great for **browsing**, but they cannot
-rebuild a full Zotero library: a BibLaTeX export has no collection information, and
+rebuild a full Zotero library. A BibLaTeX export has no collection information, and
 the PDFs are renamed by title rather than kept in Zotero's `storage/` layout. The
 collection tree, tags and notes live only in `zotero.sqlite`.
 
@@ -131,7 +131,7 @@ python scripts/zotero_sync.py --repo . --db /path/to/zotero.sqlite --backup
 This writes a `Zotero-backup/` folder (a consistent online snapshot of
 `zotero.sqlite` plus a copy of `storage/`) next to your `Collections/`. It is safe
 to run while Zotero is open. Because it copies every PDF a second time the repo
-gets larger — use [Git LFS](https://git-lfs.com) for big libraries.
+gets larger, so use [Git LFS](https://git-lfs.com) for big libraries.
 
 **Restore on the other machine.**
 
@@ -140,10 +140,10 @@ gets larger — use [Git LFS](https://git-lfs.com) for big libraries.
 3. In the app, click **Restore…**, choose the cloned `Zotero-backup/` folder and
    your Zotero data folder, then confirm. The old `zotero.sqlite` and `storage/`
    are renamed to `*.old-N` (never deleted), so you can undo by hand.
-4. Reopen Zotero — collections, tags, notes and PDFs are all back.
+4. Reopen Zotero. Collections, tags, notes and PDFs are all back.
 
-> Restore **overwrites** that machine's Zotero library, so it is for cloning onto
-> a fresh or empty profile, not for merging into an existing one.
+> Restore **overwrites** that machine's Zotero library, so it is meant for cloning
+> onto a fresh or empty profile, not for merging into an existing one.
 
 ## Doing it without the app
 
@@ -167,7 +167,7 @@ pwsh ./update.ps1            # -ZoteroDb "D:\path\to\zotero.sqlite" if elsewhere
 ./update.sh                  # ZOTERO_DB="/path/to/zotero.sqlite" ./update.sh
 ```
 
-**Skip collections entirely.** A flat backup is already useful — just `git init`,
+**Skip collections entirely.** A flat backup is already useful. Just `git init`,
 `git add -A`, `git commit`, `git push` the raw export (step 3). The `Collections/`
 tree is optional.
 
